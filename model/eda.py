@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.cluster import DBSCAN
 
+pd.set_option('display.max_columns', 500)
+
 df = pd.read_csv("caffeine.csv")
 print("First 10 rows...\n")
 print(df.head(10))
@@ -45,6 +47,9 @@ for b in bars:
                 ha='center', va='bottom')
 
 plt.show()
+#caffeine level per volume
+df["caffeine_over_ml"] = df["caffeine"] / df["volume"]
+print(df.head())
 
 #plotting caffeine drinks type over  volume and caffeine level ratio
 
@@ -160,5 +165,6 @@ fig, ax = plt.subplots(figsize=(10, 7))
 ax = sns.heatmap(df.corr(), vmin= -1, vmax= 1, annot= True)
 plt.show()
 
-df.to_csv("clean_caffeine.csv", sep=",")
+# cleaned dataframe
+df.to_csv("clean_caffeine.csv", sep=",", index= False)
 
