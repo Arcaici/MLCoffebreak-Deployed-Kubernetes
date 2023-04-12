@@ -52,12 +52,12 @@ X_train.drink = clean_drink(X_train.drink)
 X_train = X_train.reset_index()
 tfid_enc = TfidfVectorizer(min_df=5, max_df=150, ngram_range=(1,3))
 
-    #drinks features using TfidfVectorizer
+    #drink features using TfidfVectorizer
 drinks_word_features = tfid_enc.fit_transform(X_train.drink)
     #converting feature vector to dataframe
 drinks_word_features = pd.DataFrame(drinks_word_features.toarray().transpose(),
                    index=tfid_enc.get_feature_names())
-    #dropping drinks names from df
+    #dropping drink names from df
 X_train.drop(columns= ["drink", "index"] ,axis=1, inplace=True)
     #resultant dataframe
 X_train = pd.concat([X_train, drinks_word_features.transpose()], axis=1)
@@ -99,7 +99,7 @@ drinks_word_features_test = tfid_enc.transform(X_test.drink)
         #converting feature vector to dataframe
 drinks_word_features_test = pd.DataFrame(drinks_word_features_test.toarray().transpose(),
                    index=tfid_enc.get_feature_names())
-        #dropping drinks names from df
+        #dropping drink names from df
 X_test.drop(columns= ["drink", "index"] ,axis=1, inplace=True)
         #resultant dataframe
 X_test = pd.concat([X_test, drinks_word_features_test.transpose()], axis=1)

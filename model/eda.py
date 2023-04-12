@@ -25,11 +25,11 @@ drink_counts = df["type"].value_counts()
 
 print(df.info())
 
-#plotting caffeine drinks type
+#plotting caffeine drink type
 fig, ax = plt.subplots(figsize=(10, 7))
 bars = ax.bar(drink_type, drink_counts, width=1, edgecolor="white", linewidth=0.7)
-ax.set_title("Types and amounts of drinks")
-ax.set_xlabel("Types of drinks")
+ax.set_title("Types and amounts of drink")
+ax.set_xlabel("Types of drink")
 ax.set_ylabel("Number of occurrences")
 
 total_amount_drinks = sum(df["type"].value_counts())
@@ -51,7 +51,7 @@ plt.show()
 df["caffeine_over_ml"] = df["caffeine"] / df["volume"]
 print(df.head())
 
-#plotting caffeine drinks type over  volume and caffeine level ratio
+#plotting caffeine drink type over  volume and caffeine level ratio
 
 caffeine_measures = df[["volume","caffeine", "type"]]
 color_values = sns.color_palette("Set2", drink_type.size)
@@ -72,7 +72,7 @@ ax.set_ylabel("Caffeine level (mg)")
 plt.show()
 
 #removing volume outliers
-#I assumed that drinks with volumes greater than 800 ml are not so frequent
+#I assumed that drink with volumes greater than 800 ml are not so frequent
 df = df[df.volume < 800]
 
 #violinplot of caffeine over type of drink
@@ -82,7 +82,7 @@ ax.set_title("Caffeine distribution over drink types")
 plt.show()
 
 #removing caffeine outliers
-#I assumed that drinks with caffeine greater than 500 mg are not so frequent
+#I assumed that drink with caffeine greater than 500 mg are not so frequent
 df = df[df.caffeine < 500]
 
 #boxplot for check if there are other outliers in caffeine feature
@@ -93,7 +93,7 @@ plt.show()
 
 #boxplot for check if there are other outliers in volume feature
 
-    #all drinks type besideze Soft Drink and Energy Drink
+    #all drink type besideze Soft Drink and Energy Drink
 fig, ax = plt.subplots( figsize=(10, 7))
 sns.boxplot(y="volume", x="type", data= df[(df.type != "Energy Shots") & (df.type !="Soft Drinks")])
 ax.set_title("volume distribution after removing overall outliers (not Energy Shots | Soft Drinks ")
@@ -137,11 +137,11 @@ axs[0].set_ylabel("")
 axs[1].set_title("volume distribution after removing outliers (Soft Drinks)")
 plt.show()
 
-#plotting caffeine drinks type after outliers where removed
+#plotting caffeine drink type after outliers where removed
 fig, ax = plt.subplots(figsize=(10, 7))
 bars = ax.bar(drink_type, drink_counts, width=1, edgecolor="white", linewidth=0.7, color="green")
-ax.set_title("Types and amounts of drinks")
-ax.set_xlabel("Types of drinks")
+ax.set_title("Types and amounts of drink")
+ax.set_xlabel("Types of drink")
 ax.set_ylabel("Number of occurrences")
 
 total_amount_drinks = sum(df["type"].value_counts())

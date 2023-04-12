@@ -1,13 +1,9 @@
-import pickle
-
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import f1_score, classification_report, confusion_matrix
-import seaborn as sns
-from matplotlib import pyplot as plt
+from sklearn.pipeline import Pipeline
+import pickle
 
 def make_lowercase(drinks):
     return drinks.str.lower()
@@ -46,7 +42,7 @@ drinks_word_features = tfid_enc.fit_transform(df.drink)
 #converting feature vector to dataframe
 drinks_word_features = pd.DataFrame(drinks_word_features.toarray().transpose(),
                    index=tfid_enc.get_feature_names())
-#dropping drinks names from df
+#dropping drink names from df
 df.drop(columns = "drink" ,axis=1, inplace=True)
 
 #resultant dataframe

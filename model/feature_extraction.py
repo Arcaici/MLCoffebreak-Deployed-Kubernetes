@@ -26,7 +26,7 @@ df = pd.read_csv("clean_caffeine.csv")
 drink_type = df["type"].unique()
 drink_counts = df["type"].value_counts()
 
-#plotting caffeine drinks type over  volume and caffeine level ratio
+#plotting caffeine drink type over  volume and caffeine level ratio
 
 caffeine_measures = df[["volume","caffeine", "type"]]
 color_values = sns.color_palette("Set2", drink_type.size)
@@ -103,16 +103,16 @@ ax.set_ylabel("number of features ")
 ax.set_xlabel("Word occurrencys bin")
 plt.show()
 print(no_under_nine_word_amount)
-    #Types drinks over words
+    #Types drink over words
 df["drink"] = df["drink"].str.lower()
 
-    #initializing dict for counting words belonging to drinks types
+    #initializing dict for counting words belonging to drink types
 types_word_feature_dict = {}
 for t in drink_type:
     types_word_feature_dict[f"{t}"] = 0
 print(types_word_feature_dict)
 
-    #counting words belonging to drinks types
+    #counting words belonging to drink types
 for w in no_under_nine_word_amount.index:
     for _, row in df.iterrows():
         if w in row.drink:
