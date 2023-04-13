@@ -9,15 +9,12 @@ import pickle
 
 app = Flask(__name__)
 
-messages = [{'result': '',
-             'description': ''}]
-
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
 
-@app.route("/send", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def requesthandler():
 
     def make_lowercase(drink):
@@ -51,27 +48,51 @@ def requesthandler():
         new_data = pd.concat([new_data, drinks_word_features.transpose()], axis=1)
         return new_data
 
+    def data_used_for_db_ingestion(new_data):
+        min_tfidf_feature_value = 0.0
+        new_data = new_data.loc[:, ~(new_data == 0.0).all()]
+        print(new_data)
+        return new_data
+
     # loading model, label encoder, TfidfVectorizer
     le = pickle.load(open('label_enc.pkl', 'rb'))
     tfidf_enc = pickle.load(open('tfidf_enc.pkl', 'rb'))
     clf = pickle.load(open('model.pkl', 'rb'))
 
     # input data
-    drink  = request.form['drink']
-    volume = request.form['volume']
-    calories = request.form['calories']
-    caffeine = request.form['caffeine']
-    caffeine_over_ml = caffeine/volume
+    drink  = str(request.form['drink'])
+    volume = float(request.form['volume'])
+    calories = int(request.form['calories'])
+    caffeine = int(request.form['caffeine'])
+    caffeine_over_ml = float(caffeine)/float(volume)
 
     new_data = pd.DataFrame(data=np.array([[drink, volume, calories, caffeine, caffeine_over_ml]]),
                                 columns=['drink', 'volume', 'calories', 'caffeine', 'caffeine_over_ml'])
     new_data = preprocessing(new_data, tfidf_enc)
 
+    #template data
+    messages = {'result': '',
+                'description': ''}
+
     # prediction
     predicted = clf.predict(new_data)
-    messages['result'] = le.inverse_transform(predicted)
-    messages['description'] = f"You are drinking {le.inverse_transform(predicted)}, hope you are enjoing your brake!"
-    return render_template("index.html", message=messages)
+    predicted_proba = clf.predict_proba(new_data)
+    print(predicted_proba)
+
+    tmp = str(le.inverse_transform(predicted))
+    tmp = tmp.replace("']", "")
+    tmp = tmp.replace("['", "")
+
+    #db new_data ingestion acquisition
+    new_data = data_used_for_db_ingestion(new_data)
+    dict_ingestion = {'label': predicted, 'data': new_data, 'result_proba': predicted_proba}
+    print(dict_ingestion)
+
+    #loading template
+    messages['result'] =  tmp
+    messages['description'] = f"You are drinking {tmp}, hope you are enjoing your brake!"
+
+    return render_template("index.html", **messages)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
