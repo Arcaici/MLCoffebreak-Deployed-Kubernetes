@@ -1,3 +1,5 @@
+import csv
+
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
@@ -61,3 +63,10 @@ clf.fit(df, label)
 pickle.dump(clf, open('model.pkl', 'wb'))
 pickle.dump(le, open('label_enc.pkl', 'wb'))
 pickle.dump(tfid_enc, open('tfidf_enc.pkl','wb'))
+
+#Saving TfIdf features name
+tfid_features = tfid_enc.get_feature_names()
+print(tfid_features)
+with open('tfidf_feature_list.csv', 'w') as f:
+    csv_writer = csv.writer(f)
+    csv_writer.writerow(tfid_features)
