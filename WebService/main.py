@@ -55,9 +55,9 @@ def requesthandler():
         return new_data
 
     # loading model, label encoder, TfidfVectorizer
-    le = pickle.load(open('label_enc.pkl', 'rb'))
-    tfidf_enc = pickle.load(open('tfidf_enc.pkl', 'rb'))
-    clf = pickle.load(open('model.pkl', 'rb'))
+    le = pickle.load(open('pretrained_model/label_enc.pkl', 'rb'))
+    tfidf_enc = pickle.load(open('pretrained_model/tfidf_enc.pkl', 'rb'))
+    clf = pickle.load(open('pretrained_model/model.pkl', 'rb'))
 
     # input data
     drink  = str(request.form['drink'])
