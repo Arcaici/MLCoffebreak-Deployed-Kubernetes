@@ -67,6 +67,6 @@ pickle.dump(tfid_enc, open('tfidf_enc.pkl','wb'))
 #Saving TfIdf features name
 tfid_features = tfid_enc.get_feature_names()
 print(tfid_features)
-with open('tfidf_feature_list.csv', 'w') as f:
+with open('../cassandra_auto_columns/tfidf_feature_list.csv', 'w') as f:
     csv_writer = csv.writer(f)
     csv_writer.writerow(tfid_features)
