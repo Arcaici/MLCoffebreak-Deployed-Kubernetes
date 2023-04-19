@@ -1,0 +1,10 @@
+FROM bitnami/cassandra:latest
+
+WORKDIR /CoffeeApp
+
+ENV CASSANDRA_SEEDS=cassandra
+ENV CASSANDRA_CLUSTER_NAME=caffeinedata
+ENV CASSANDRA_PASSWORD_SEEDER=yes
+ENV CASSANDRA_PASSWORD=cassandra
+
+EXPOSE 9042

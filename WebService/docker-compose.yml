@@ -1,0 +1,44 @@
+version: "3.9"  # optional since v1.27.0
+
+services:
+  app:
+    image: webservice-app:latest
+    container_name: caffeineapp
+    restart: always
+    depends_on:
+      - cassandra
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+    ports:
+      - "8000:5000"
+    command: python main.py
+    networks:
+      - caffeine_network
+
+  cassandra:
+    image: cassandra_caffeine:latest
+    container_name: cassandra
+    restart: always
+    ports:
+      - "9042:9042"
+    volumes:
+      - newdata:/data
+    networks:
+      - caffeine_network
+
+  cassandra_tmp:
+    image: cassandra_init
+    command: >
+       bash ./init-scripts/init_cassandra.sh
+    depends_on:
+      - cassandra
+    networks:
+      - caffeine_network
+
+volumes:
+  newdata:
+
+networks:
+  caffeine_network:
+    name: caffeine_network
