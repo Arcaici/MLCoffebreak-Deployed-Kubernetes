@@ -82,7 +82,7 @@ The Web Service Service enables external access to the Caffeine web service. It 
 
 ## NGINX Pod
 
-The NGINX Pod hosts a single instance of the NGINX server. The Pod configuration is as follows:
+The NGINX Pod hosts a single instance of the NGINX server for testing purpouse. The Pod configuration is as follows:
 
 - **Name**: nginx-pod
 - **Namespace**: caffeine
