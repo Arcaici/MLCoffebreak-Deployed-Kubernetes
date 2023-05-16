@@ -14,27 +14,10 @@ from cassandra.auth import PlainTextAuthProvider
 
 app = Flask(__name__)
 
-def isOpen(ip, port):
-   test = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   try:
-      test.connect((ip, int(port)))
-      test.shutdown(1)
-      return True
-   except:
-      return False
-
-def fakeLoadBalancer():
-    ips = []
-    ip = "cassandra"
-    port = 9042
-    if isOpen(ip, port):
-        ips.append(ip)
-    return ips
-
 #connection variables
-cluster = Cluster(fakeLoadBalancer(), port=9042,
+cluster = Cluster(['10.1.0.170'], port=9042,
                   auth_provider=PlainTextAuthProvider(username='cassandra', password='cassandra'))
-session = cluster.connect('caffeine', wait_for_all_pools=False)
+session = cluster.connect('caffeinedata', wait_for_all_pools=False)
 
 def make_lowercase(drink):
     return drink.str.lower()
@@ -77,10 +60,10 @@ def data_used_for_db_ingestion(new_data):
     return new_data
 
 def data_ingestion(newdata, drink):
-    session.execute('USE caffeine')
+    session.execute('USE caffeinedata')
     newdata = dict(newdata[0])
     tmp=""
-    insert_query = "INSERT INTO caffeine.new_caffeine(drink_name, "
+    insert_query = "INSERT INTO caffeinedata.new_caffeine(drink_name, "
     for key in newdata.keys():
         insert_query = insert_query + str(key).replace(" ","_") + ', '
         tmp = str(key).replace(" ","_")

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: caffeine-cassandra
+  namespace: caffeine
+  labels:
+    app: caffeine-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caffeine-db
+  template:
+    metadata:
+      labels:
+        app: caffeine-db
+    spec:
+      containers:
+      - name: cassandra-caffeine
+        image: cassandra_caffeine
+        imagePullPolicy: Never
+        env:
+          - name: CASSANDRA_SEEDS
+            value: "caffeine-cassandra-0"
+        ports:
+        - containerPort: 9042 
+        volumeMounts:
+        - name: caffeine-pvc
+          mountPath: /var/cassandra/data
+      volumes:
+      - name: caffeine-pvc
+        persistentVolumeClaim:
+          claimName: caffeine-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caffeine-service-db
+  namespace: caffeine
+spec:
+  selector:
+    app: caffeine-db
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 9042
+      targetPort: 9042
+  
