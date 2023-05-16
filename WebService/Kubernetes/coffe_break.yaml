@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: caffeine-cassandra
+  namespace: caffeine
+  labels:
+    app: caffeine-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caffeine-db
+  template:
+    metadata:
+      labels:
+        app: caffeine-db
+    spec:
+      containers:
+      - name: cassandra-caffeine
+        image: cassandra_caffeine
+        imagePullPolicy: Never
+        env:
+          - name: CASSANDRA_SEEDS
+            value: "caffeine-cassandra-0"
+        ports:
+        - containerPort: 9042 
+        volumeMounts:
+        - name: caffeine-pvc
+          mountPath: /var/cassandra/data
+      volumes:
+      - name: caffeine-pvc
+        persistentVolumeClaim:
+          claimName: caffeine-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caffeine-service-db
+  namespace: caffeine
+spec:
+  selector:
+    app: caffeine-db
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 9042
+      targetPort: 9042
+  
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: caffeine
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caffeine-pvc
+  namespace: caffeine
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test
+  namespace: caffeine
+spec:
+  selector:
+    app: caffeine-db
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caffeine-ws
+  namespace: caffeine
+  labels:
+    app: caffeine-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: caffeine-app
+  template:
+    metadata:
+      labels:
+        app: caffeine-app
+    spec:
+      containers:
+      - name: web-service
+        image: webservice-app
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: caffeine-service-ws
+  namespace: caffeine
+spec:
+  selector:
+    app: caffeine-app
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30100
