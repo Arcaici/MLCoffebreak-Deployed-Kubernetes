@@ -1,4 +1,4 @@
-CREATE COLUMNFAMILY caffeine.new_caffeine (
+CREATE COLUMNFAMILY caffeinedata.new_caffeine (
   drink_name text PRIMARY KEY,
   volume float,
   calories float,

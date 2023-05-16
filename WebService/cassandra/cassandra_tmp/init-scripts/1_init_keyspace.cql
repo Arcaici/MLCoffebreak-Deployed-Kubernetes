@@ -1,5 +1,5 @@
-CREATE KEYSPACE IF NOT EXISTS caffeine
+CREATE KEYSPACE IF NOT EXISTS caffeinedata
   WITH REPLICATION = {
    'class' : 'SimpleStrategy',
-   'replication_factor' : 2
+   'replication_factor' : 1
 };
