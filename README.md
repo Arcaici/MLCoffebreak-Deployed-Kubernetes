@@ -65,6 +65,6 @@ Then open your browser and go to "http://localhost:8080"
 ## Further Documentation
 Here are the links to the Docker and Kubernetes versions and model:
 
-- [Docker version](https://link-to-docker-version](https://github.com/Arcaici/MLCoffebreak-Deployed-Kubernetes/tree/main/WebService)
+- [Docker version](https://github.com/Arcaici/MLCoffebreak-Deployed-Kubernetes/tree/main/WebService)
 - [Kubernetes version](https://github.com/Arcaici/MLCoffebreak-Deployed-Kubernetes/tree/main/WebService/Docker)
 - [Model](https://github.com/Arcaici/MLCoffebreak-Deployed-Kubernetes/tree/main/model)
