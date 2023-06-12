@@ -6,7 +6,8 @@ metadata:
 spec:
   containers:
     - name: nginx-container
-      image: nginx
+      image: test
+      imagePullPolicy: Never
       ports:
         - containerPort: 80
 ---

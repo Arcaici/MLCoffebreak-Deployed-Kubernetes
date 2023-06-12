@@ -15,7 +15,7 @@ from cassandra.auth import PlainTextAuthProvider
 app = Flask(__name__)
 
 #connection variables
-cluster = Cluster(['10.1.0.170'], port=9042,
+cluster = Cluster(['10.1.0.208'], port=9042,
                   auth_provider=PlainTextAuthProvider(username='cassandra', password='cassandra'))
 session = cluster.connect('caffeinedata', wait_for_all_pools=False)
 
